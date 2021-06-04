@@ -1,6 +1,6 @@
 #!/bin/bash
 #spoustet z adresare s .fasta soubory po assembly
-#precte nazev *.fa souboru a problastuje ho proti databazi Ssuis_SerotypingX.fasta. Tim urci serotyp izolatu S. suis
+#precte nazev *.fasta souboru a problastuje ho proti databazi Ssuis_SerotypingX.fasta. Tim urci serotyp izolatu S. suis
 for x in *.fasta
   do blastn -query "$x" -db /DATADISK/biodata/blastdb/Ssuis_Serotyping3v3.fasta -task megablast -dust no -outfmt "6 sseqid evalue score ppos" -max_target_seqs 2 -out "$x".blasttest
 #vytvoreni hlavicky s nazvem kontigu a jeji zkraceni na cislo vzorku
@@ -169,7 +169,7 @@ cat shorthead "$x".vysl "$x".blasttest > "$x".vysle
 sed ':a;N;$!ba;s/\n/\t/g' "$x".vysle > "$x".merged
 done
 #vytvoreni hlavickoveho radku a ulozeni vseho do souboru serotypes.csv
-echo "vzorek	serotyp	cps	cps_evalue	cps_score	cps_ppos	cpsk	cpsk_evalue	cpsk_score	cpsk_ppos" > hlavicka
+echo "sample	serotype	cps	cps_evalue	cps_score	cps_ppos	cpsk	cpsk_evalue	cpsk_score	cpsk_ppose" > hlavicka
 cat hlavicka *.merged > serotypes4.1.tsv
 #odstraneni nepotrebnych souboru
 rm *.blasttest
