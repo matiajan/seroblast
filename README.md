@@ -1,5 +1,5 @@
 # seroblast
-BASH script for identification of S. suis serotype from draft genome
+simple BASH script for identification of S. suis serotype from draft genome
 
 Database of serotype-specific sequences is modified from SsuisSerotyping_pipeline. Unlike SsuisSerotyping_pipeline, the seroblast is dependent only on local blast installation.
 
@@ -11,7 +11,7 @@ Translation to English will follow.
  
 3. build blast database in /blastdb
 
-makeblastdb -in Ssuis_Serotyping3v3.fasta -parse_seqids -blastdb_version 5 -title "SsuisSerotype" -dbtype nucl
+# makeblastdb -in Ssuis_Serotyping3v3.fasta -parse_seqids -blastdb_version 5 -title "SsuisSerotype" -dbtype nucl
 
 3. edit line 5 in seroblast4.1 script to locate blast database in your correct path (/home/$HOME/blastdb)
 
