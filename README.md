@@ -11,7 +11,7 @@ Translation to English will follow.
  
 3. build blast database in /blastdb
 
-# makeblastdb -in Ssuis_Serotyping3v3.fasta -parse_seqids -blastdb_version 5 -title "SsuisSerotype" -dbtype nucl
+makeblastdb -in Ssuis_Serotyping3v3.fasta -parse_seqids -blastdb_version 5 -title "SsuisSerotype" -dbtype nucl
 
 3. edit line 5 in seroblast4.1 script to locate blast database in your correct path (/home/$HOME/blastdb)
 
