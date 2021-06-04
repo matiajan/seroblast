@@ -1,0 +1,184 @@
+#!/bin/bash
+#spoustet z adresare s .fasta soubory po assembly
+#precte nazev *.fa souboru a problastuje ho proti databazi Ssuis_SerotypingX.fasta. Tim urci serotyp izolatu S. suis
+for x in *.fasta
+  do blastn -query "$x" -db /DATADISK/biodata/blastdb/Ssuis_Serotyping3v3.fasta -task megablast -dust no -outfmt "6 sseqid evalue score ppos" -max_target_seqs 2 -out "$x".blasttest
+#vytvoreni hlavicky s nazvem kontigu a jeji zkraceni na cislo vzorku
+echo "$x" > head
+cut -c 1-3 head > shorthead
+#rozliseni serotypu 2vs1/2 a 1vs14 a pridani vysledku, z radku 1 a 2 vybere do promenne jen prvni sloupec
+ln1=`sed -n 1p "$x".blasttest| cut -d$'\t' -f 1`
+ln2=`sed -n 2p "$x".blasttest| cut -d$'\t' -f 1`
+echo "$x"
+echo "$ln1"
+echo "$ln2"
+case "$ln1" in
+  cps-1)
+    case "$ln2" in
+    cpsK2cpsK14)
+     vys="14"
+     ;;
+     cpsK1cpsK1/2-T)
+      vys="1"
+     ;;
+     cpsK1cpsK1/2-C)
+      vys="1"
+     ;;
+     *)
+      vys="serotyp neurcen"
+     ;;
+     esac
+     ;;
+   cps-2)
+    case "$ln2" in
+    cpsK2cpsK14)
+     vys="2"
+     ;;
+     cpsK1cpsK1/2-T)
+      vys="1-2"
+     ;;
+     cpsK1cpsK1/2-C)
+      vys="1-2"
+     ;;
+     *)
+      vys="serotyp neurcen"
+     ;;
+     esac
+   ;;
+   cps-3)
+   vys="3"
+   ;;
+   cps-4)
+   vys="4"
+   ;;
+   cps-5)
+   vys="5"
+   ;;
+   cps-6)
+   vys="6"
+   ;;
+   cps-7)
+   vys="7"
+   ;;
+   cps-8)
+   vys="8"
+   ;;
+   cps-9)
+   vys="9"
+   ;;
+   cps-10)
+   vys="10"
+   ;;
+   cps-11)
+   vys="11"
+   ;;
+   cps-12)
+   vys="12"
+   ;;
+   cps-13)
+   vys="13"
+   ;;
+   cps-15)
+   vys="15"
+   ;;
+   cps-16)
+   vys="16"
+   ;;
+   cps-17)
+   vys="17"
+   ;;
+   cps-18)
+   vys="18"
+   ;;
+   cps-19)
+   vys="19"
+   ;;
+   cps-20)
+   vys="20"
+   ;;
+   cps-21)
+   vys="21"
+   ;;
+   cps-22)
+   vys="22"
+   ;;
+   cps-23)
+   vys="23"
+   ;;
+   cps-24)
+   vys="24"
+   ;;
+   cps-25)
+   vys="25"
+   ;;
+   cps-26)
+   vys="26"
+   ;;
+   cps-27)
+   vys="27"
+   ;;
+   cps-28)
+   vys="28"
+   ;;
+   cps-29)
+   vys="29"
+   ;;
+   cps-30)
+   vys="30"
+   ;;
+   cps-31)
+   vys="31"
+   ;;
+   cps-32)
+   vys="32"
+   ;;
+   cps-33)
+   vys="33"
+   ;;
+   cps-34)
+   vys="34"
+   ;;
+   Chz)
+   vys="Chz"
+   ;;
+   C12_LODOEAPI_00011)
+   vys="C12"
+   ;;
+   E4_KMFLLMEC_00004)
+   vys="E4"
+   ;;
+   D5_HCDBLACE_00002)
+   vys="D5"
+   ;;
+   E1_IENNNLPN_00010)
+   vys="E1"
+   ;;
+   D8_BGNLEMPH_00014)
+   vys="D8"
+   ;;
+   F2_INLOLKPE_00014)
+   vys="F2"
+   ;;
+   *)
+   vys="serotyp neurcen"
+   ;;
+esac
+echo "$vys" > "$x".vysl
+cat shorthead "$x".vysl "$x".blasttest > "$x".vysle
+#odstraneni zalamovani radku a oddeleni sloupcu tabem 
+sed ':a;N;$!ba;s/\n/\t/g' "$x".vysle > "$x".merged
+done
+#vytvoreni hlavickoveho radku a ulozeni vseho do souboru serotypes.csv
+echo "vzorek	serotyp	cps	cps_evalue	cps_score	cps_ppos	cpsk	cpsk_evalue	cpsk_score	cpsk_ppos" > hlavicka
+cat hlavicka *.merged > serotypes4.1.tsv
+#odstraneni nepotrebnych souboru
+rm *.blasttest
+rm head
+rm shorthead
+rm *.merged
+rm *.vysl
+rm *.vysle
+rm hlavicka
+exit 0
+
+
