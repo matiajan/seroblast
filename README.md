@@ -9,11 +9,11 @@ Translation to English will follow.
 
 2. create /blastdb directory and put file Ssuis_Serotyping3v3.fasta here
  
-3. build blast database in /home/blastdb/
+3. build blast database in /blastdb
 
 makeblastdb -in Ssuis_Serotyping3v3.fasta -parse_seqids -blastdb_version 5 -title "SsuisSerotype" -dbtype nucl
 
-3. edit line 5 in seroblast4.1 script to locate blast database to your correct path
+3. edit line 5 in seroblast4.1 script to locate blast database in your correct path (/home/$HOME/blastdb)
 
 4. run seroblast4.1 from directory containing your S. suis draft genomes
 
