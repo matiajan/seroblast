@@ -5,7 +5,7 @@ Database of serotype-specific sequences is modified from SsuisSerotyping_pipelin
 
 1. install blast locally
 
-for Ubuntu and Deban users
+for Ubuntu and Debian users
 
 sudo apt install ncbi-blast+
 
@@ -17,7 +17,7 @@ others https://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE_TYPE=BlastDocs&DOC_TYPE=Dow
 
 makeblastdb -in Ssuis_Serotyping3v3.fasta -parse_seqids -blastdb_version 5 -title "SsuisSerotype" -dbtype nucl
 
-3. edit line 5 in seroblast4.1 script to locate blast database in your correct path (/home/$HOME/blastdb)
+3. edit line 5 in seroblast4.1 script to locate blast database in your correct path (for example /home/$HOME/blastdb)
 
 4. run seroblast4.1 from directory containing your S. suis draft genomes named *.fasta
 
