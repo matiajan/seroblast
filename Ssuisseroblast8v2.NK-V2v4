@@ -1,0 +1,305 @@
+#!/bin/bash
+#run from folder containing Streptococcus suis genomes in multiple fasta format with .fasta suffix
+#read name of *.fasta file and blast it against Ssuis_SerotypingX.fasta database. Presence of recN gene will be tested and serotype will be determined.
+for x in *.fasta
+  do blastn -query "$x" -db /home/matiasovicj/genomes/test/db/Ssuis_Serotyping8v2-NK-V2v3.fasta -task megablast -dust no -outfmt "6 sseqid evalue score ppos" -max_target_seqs 5 -num_threads 10 | sort -k3 -n -r > "$x".blasttest
+#take lines from blast results containing recN result and take only first line
+grep 'recN' "$x".blasttest | head -1 > "$x".blastrecN
+#prepare blastrecN result for final table 
+cut -f 2,3,4 "$x".blastrecN > "$x".blastrecN2
+#take the first line from blast results containing all non recN, non cpsK and non mdresults sorted by score
+grep -v 'recN' "$x".blasttest | grep -v '^cpsK.' | grep -v '^md' | sort -k3 -n -r | head -1 > "$x".blastcps
+#take the first line from blast results containing modifying genes (md) sorted by score
+grep 'md' "$x".blasttest | sort -k3 -n -r | sed -n '1p' > "$x".blastcps2
+#take first line from blast results containing any cpsK results sorted by score
+grep '^cpsK.' "$x".blasttest | sort -k3 -n -r | head -1 > "$x".blastcpsK
+
+
+#test if the "$x".blastcps2"" is empty; case it is, add 0
+if [ -s ""$x".blastcps2" ]; then
+    echo
+else
+    echo "md not detected	.	.	." > ""$x".blastcps2"
+fi
+
+#make head named after the actual fasta file
+echo "$x" | sed 's/.fasta//' > shorthead
+#from "$x".blastrecN result take first column, will read presence of recN
+rcN=`sed -n 1p "$x".blastrecN| cut -d$'\t' -f 1`
+#from "$x".blastcps and "$x".blastcpsK take first column, will read resolution of serotype, 2vs1/2 and 1vs14
+cps=`sed -n 1p "$x".blastcps | cut -d$'\t' -f 1`
+cpsK=`sed -n 1p "$x".blastcpsK | cut -d$'\t' -f 1`
+#cps2=`sed -n 1p "$x".blastcps2 | cut -d$'\t' -f 1`
+
+echo "$x"
+echo "$rcN"
+echo "$cps"
+echo "$cps2"
+echo "$cpsK"
+echo
+case "$rcN" in 
+   recN)
+   recNpresence="recN present"
+   ;;
+   *)
+   recNpresence="recN not detected	.	.	."
+esac
+case "$cps" in
+  cps-1)
+    case "$cpsK" in
+    cpsK2cpsK14)
+     vys="14"
+     ;;
+     cpsK1cpsK1/2-T)
+      vys="1"
+     ;;
+     cpsK1cpsK1/2-C)
+      vys="1"
+     ;;
+     *)
+      vys="serotype not determined	.	.	.	."
+     ;;
+     esac
+     ;;
+   cps-2)
+    case "$cpsK" in
+    cpsK2cpsK14)
+     vys="2"
+     ;;
+     cpsK1cpsK1/2-T)
+      vys="1-2"
+     ;;
+     cpsK1cpsK1/2-C)
+      vys="1-2"
+     ;;
+     *)
+      vys="serotype not determined	.	.	.	."
+     ;;
+     esac
+   ;;
+   cps-3)
+   vys="3"
+   ;;
+   cps-4)
+   vys="4"
+   ;;
+   cps-5)
+   vys="5"
+   ;;
+   cps-6)
+   vys="6"
+   ;;
+   cps-7)
+   vys="7"
+   ;;
+   cps-8)
+   vys="8"
+   ;;
+   cps-9)
+   vys="9"
+   ;;
+   cps-10)
+   vys="10"
+   ;;
+   cps-11)
+   vys="11"
+   ;;
+   cps-12)
+   vys="12"
+   ;;
+   cps-13)
+   vys="13"
+   ;;
+   cps-15)
+   vys="15"
+   ;;
+   cps-16)
+   vys="16"
+   ;;
+   cps-17)
+   vys="17"
+   ;;
+   cps-18)
+   vys="18"
+   ;;
+   cps-19)
+   vys="19"
+   ;;
+   cps-20_S.parasuis)
+   vys="20_S.parasuis"
+   ;;
+   cps-21)
+   vys="21"
+   ;;
+   cps-22_S.parasuis)
+   vys="22_S.parasuis"
+   ;;
+   cps-23)
+   vys="23"
+   ;;
+   cps-24)
+   vys="24"
+   ;;
+   cps-25)
+   vys="25"
+   ;;
+   cps-26_S.parasuis)
+   vys="26_S.parasuis"
+   ;;
+   cps-27)
+   vys="27"
+   ;;
+   cps-28)
+   vys="28"
+   ;;
+   cps-29)
+   vys="29"
+   ;;
+   cps-30)
+   vys="30"
+   ;;
+   cps-31)
+   vys="31"
+   ;;
+   cps-32_S.orisratti)
+   vys="32_S.orisratti"
+   ;;
+   cps-33_S.ruminantium)
+   vys="33_S.ruminantium"
+   ;;
+   cps-34_S.orisratti)
+   vys="34_S.orisratti"
+   ;;
+   NCL1)
+   vys="NCL1"
+   ;;
+   NCL2)
+   vys="NCL2"
+   ;;
+   NCL3)
+   vys="NCL3"
+   ;;
+   NCL4)
+   vys="NCL4"
+   ;;
+   NCL5)
+   vys="NCL5"
+   ;;
+   NCL6)
+   vys="NCL6"
+   ;;
+   NCL7)
+   vys="NCL7"
+   ;;
+   NCL8)
+   vys="NCL8"
+   ;;
+   NCL9)
+   vys="NCL9"
+   ;;
+   NCL10)
+   vys="NCL10"
+   ;;
+   NCL11)
+   vys="NCL11"
+   ;;
+   NCL12)
+   vys="NCL12"
+   ;;
+   NLC13)
+   vys="NCL13"
+   ;;
+   NCL14)
+   vys="NCL14"
+   ;;
+   NCL15)
+   vys="NCL15"
+   ;;
+   NCL16)
+   vys="NCL16"
+   ;;
+   NCL17)
+   vys="NCL17"
+   ;;
+   NCL18)
+   vys="NCL18"
+   ;;
+   NCL19)
+   vys="NCL19"
+   ;;
+   NCL20)
+   vys="NCL20"
+   ;;
+   NCL21)
+   vys="NCL21"
+   ;;
+   NCL22)
+   vys="NCL22"
+   ;;
+   NCL23)
+   vys="NCL23"
+   ;;
+   NCL24)
+   vys="NCL24"
+   ;;
+   NCL25)
+   vys="NCL25"
+   ;;
+   NCL26)
+   vys="NCL26"
+   ;;
+   Chz)
+   vys="Chz"
+   ;;
+   NK014-NCL28)
+   vys="NK014-NCL28"
+   ;;
+   NK018-NCL27)
+   vys="NK018-NCL27"
+   ;;
+   NK028-NCL29)
+   vys="NK028-NCL29"
+   ;;
+   NK147-NCL30)
+   vys="NK147-NCL30"
+   ;;
+   NK247-NCL31)
+   vys="NK247-NCL31"
+   ;;
+   NK242-NCL32)
+   vys="NK242-NCL32"
+   ;;
+   *)
+   vys="serotype not determined	.	.	.	."
+   ;;
+esac
+#make final table
+#test if the "$x".blastcpsK is empty; case it is, add three dosts separated by tab
+if [ -s ""$x".blastcpsK" ]; then
+    echo
+else
+    echo ".	.	.	." > ""$x".blastcpsK"
+fi
+echo "$recNpresence" > "$x".recNpresence
+echo "$vys" > "$x".vysl
+cat shorthead "$x".vysl "$x".blastcps "$x".blastcps2 "$x".blastcpsK "$x".recNpresence "$x".blastrecN2 > "$x".vysle
+#remove line wrapping and tab column separation 
+sed ':a;N;$!ba;s/\n/\t/g' "$x".vysle > "$x".merged
+done
+#make head of result file serotypes.tsv
+echo "sample	serotype	cps_gene	cps_evalue	cps_score	cps_ppos	modifying_gene	cps_evalue	cps_score	cps_ppos	cpsk	cpsk_evalue	cpsk_score	cpsk_ppos	recN	recN_evalue	recN_score	recN_ppos" > hlavicka
+cat hlavicka *.merged > serotypesV8v2.NK-V2v4.tsv
+#remove temporary files
+rm *.blasttest
+rm *.blastcps
+rm *.blastcps2
+rm *.blastrecN
+rm *.blastrecN2
+rm *.blastcpsK
+rm *.recNpresence
+rm shorthead
+rm *.merged
+rm *.vysl
+rm *.vysle
+rm hlavicka
+exit 0
