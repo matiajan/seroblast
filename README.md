@@ -1,9 +1,9 @@
 # seroblast
 
 
-A simple BASH script for identification of Streptococcus suis serotype from draft genome
+A simple BASH script for identification of Streptococcus suis serotype from a draft genome
 
-Database of serotype-specific sequences is modified from SsuisSerotyping_pipeline (https://github.com/streplab/SsuisSerotyping_pipeline). Unlike SsuisSerotyping_pipeline, the seroblast is dependent only on local blast installation.
+Database of serotype-specific sequences is modified from the SsuisSerotyping_pipeline (https://github.com/streplab/SsuisSerotyping_pipeline). Unlike the SsuisSerotyping_pipeline, the seroblast is dependent only on local blast installation.
 
 1. install blast locally
 
@@ -27,4 +27,4 @@ chmod +x Ssuisseroblast8v2.NK-V2v4
    
 ./Ssuisseroblast8v2.NK-V2v4
 
-7. read output "serotypesV8v2.NK-V2v4.tsv" (tab separated columns). The columns are: "sample	serotype	cps_gene	cps_evalue	cps_score	cps_ppos	modifying_gene	cps_evalue	cps_score	cps_ppos	cpsk	cpsk_evalue	cpsk_score	cpsk_ppos	recN	recN_evalue	recN_score	recN_ppos". As a modifying_gene we understand gene potentially able to modify antigenic structure of a capsular polysaccaride.
+7. read the output "serotypesV8v2.NK-V2v4.tsv" (tab separated columns). The columns are: "sample	serotype	cps_gene	cps_evalue	cps_score	cps_ppos	modifying_gene	cps_evalue	cps_score	cps_ppos	cpsk	cpsk_evalue	cpsk_score	cpsk_ppos	recN	recN_evalue	recN_score	recN_ppos". As a modifying_gene, we understand a gene potentially able to modify antigenic structure of a capsular polysaccharide.
