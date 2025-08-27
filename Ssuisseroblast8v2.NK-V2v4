@@ -287,7 +287,7 @@ cat shorthead "$x".vysl "$x".blastcps "$x".blastcps2 "$x".blastcpsK "$x".recNpre
 sed ':a;N;$!ba;s/\n/\t/g' "$x".vysle > "$x".merged
 done
 #make head of result file serotypes.tsv
-echo "sample	serotype	cps_gene	cps_evalue	cps_score	cps_ppos	modifying_gene	cps_evalue	cps_score	cps_ppos	cpsk	cpsk_evalue	cpsk_score	cpsk_ppos	recN	recN_evalue	recN_score	recN_ppos" > hlavicka
+echo "sample	serotype	cps_gene	cps_evalue	cps_score	cps_ppos	modifying_gene	md_evalue	md_score	md_ppos	cpsk	cpsk_evalue	cpsk_score	cpsk_ppos	recN	recN_evalue	recN_score	recN_ppos" > hlavicka
 cat hlavicka *.merged > serotypesV8v2.NK-V2v4.tsv
 #remove temporary files
 rm *.blasttest
